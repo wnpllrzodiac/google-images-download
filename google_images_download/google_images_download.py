@@ -204,6 +204,50 @@ class googleimagesdownload:
 
         return source
 
+    # Download Page for more than 100 images
+    def download_extended_page2(self,url):
+        from selenium import webdriver
+        from selenium.webdriver.common.keys import Keys
+        if sys.version_info[0] < 3:
+            reload(sys)
+            sys.setdefaultencoding('utf8')
+
+        try:
+            browser = webdriver.Firefox()
+        except Exception as e:
+            print("Looks like we cannot run firefox (exception: %s)" % e)
+            sys.exit()
+        browser.set_window_size(1024, 768)
+
+        # Open the link
+        browser.get(url)
+        time.sleep(1)
+        print("Getting you a lot of images. This may take a few moments...")
+
+        element = browser.find_element_by_tag_name("body")
+        # Scroll down
+        for i in range(30):
+            element.send_keys(Keys.PAGE_DOWN)
+            time.sleep(0.3)
+
+        try:
+            browser.find_element_by_id("smb").click()
+            for i in range(50):
+                element.send_keys(Keys.PAGE_DOWN)
+                time.sleep(0.3)  # bot id protection
+        except:
+            for i in range(10):
+                element.send_keys(Keys.PAGE_DOWN)
+                time.sleep(0.3)  # bot id protection
+
+        print("Reached end of Page.")
+        time.sleep(0.5)
+
+        source = browser.page_source #page source
+        #close the browser
+        browser.close()
+
+        return source
 
     #Correcting the escape characters for python2
     def replace_with_byte(self,match):
@@ -850,7 +894,7 @@ class googleimagesdownload:
                     if limit < 101:
                         raw_html = self.download_page(url)  # download page
                     else:
-                        raw_html = self.download_extended_page(url,arguments['chromedriver'])
+                        raw_html = self.download_extended_page2(url) #,arguments['chromedriver'])
 
                     if arguments['no_download']:
                         print("Starting to Print Image URLS")
@@ -880,7 +924,7 @@ class googleimagesdownload:
                             if limit < 101:
                                 new_raw_html = self.download_page(value)  # download page
                             else:
-                                new_raw_html = self.download_extended_page(value,arguments['chromedriver'])
+                                new_raw_html = self.download_extended_page2(value) #,arguments['chromedriver'])
                             self.create_directories(main_directory, final_search_term,arguments['thumbnail'])
                             self._get_all_items(new_raw_html, main_directory, search_term + " - " + key, limit,arguments)
 
