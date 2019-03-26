@@ -324,7 +324,7 @@ class googleimagesdownload:
         req = Request(url, headers={
             "User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"})
 
-        response = urlopen(req, None, 10)
+        response = urlopen(req, None, 10, proxies={'http': '127.0.0.1:5566', 'https': '127.0.0.1:5566'})
         data = response.read()
         response.close()
 
