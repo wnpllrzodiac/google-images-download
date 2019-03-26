@@ -163,7 +163,8 @@ class googleimagesdownload:
             sys.setdefaultencoding('utf8')
         options = webdriver.ChromeOptions()
         options.add_argument('--no-sandbox')
-        options.add_argument("--headless")
+        #options.add_argument("--headless")
+        options.add_argument('--proxy-server=socks5://127.0.0.1:5566')
 
         try:
             browser = webdriver.Chrome(chromedriver, chrome_options=options)
